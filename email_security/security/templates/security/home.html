@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Email spam Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<style>
+
+
+body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+                      url(https://img.freepik.com/free-vector/phishing-account_23-2148539268.jpg?t=st=1732796461~exp=1732800061~hmac=7147dec72953162c57e6c5e78aa19419861d348039c659a21d443be71129ecbc&w=1060);
+    background-size: cover;
+    background-position: center;
+        }
+
+        /* Container for the form and results */
+        .container {
+            background: rgba(255, 255, 255, 0.1); /* Transparent background */
+            padding: 39px;
+            border-radius: 18px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Optional, for a soft shadow */
+            backdrop-filter: blur(10px); /* Apply blur effect */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            
+        }
+
+        /* Form inputs and buttons styling */
+        input[type="text"] {
+            color: #000;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #1d4ed8; /* Tailwind bg-blue-600 */
+            color: white;
+            border: none;
+            border-radius: 28px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            transition: background-color 0.3s ease, transform 0.2s ease; 
+        }
+
+        .hidden {
+            display: none;
+        }
+</style>
+<body class="text-gray-900">
+
+  
+
+    <div class="mt-8 p-6 bg text-white rounded-lg shadow-md">
+        <div class=" ml-20">
+
+            <h2 class="text-xl font-semibold mb-2">Security Status</h2>
+            <ul class="list-disc pl-5">
+                <li>Spam Protection: ✅ Enabled</li>
+                <li>Phishing Detection: ✅ Active</li>
+                <li>Threat Intelligence: ✅ Integrated</li>
+            </ul>
+       
+
+        <h3 class="text-lg font-semibold mt-4"></h3>
+        <div class="rounded-md mt-2">
+            <p></p>
+        </div>
+    </div>
+
+        <h3 class="text-lg font-semibold mt-4 ml-20">Check Email Security</h3>
+        
+
+        <div class="container">
+            <h3 class="" style="
+            font-size: 1.8rem; 
+            font-weight: 600; 
+            margin-left: 3rem; 
+            color: #ff0000; 
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8), -1px -1px 5px rgba(255, 255, 255, 0.8); 
+            letter-spacing: 1px; 
+            transition: color 0.3s ease, transform 0.2s ease; 
+        ">
+            Threat Intelligence
+        </h3>
+            <form id="ipCheckForm">
+                {% csrf_token %}
+                <input type="text" name="ip" placeholder="Enter IP Address">
+                <button type="submit" style="
+                background-color: #1d4ed8; 
+                color: white; 
+                padding: 10px 20px; 
+                border-radius: 8px; 
+                border: none; 
+                cursor: pointer; 
+                font-size: 16px; 
+               
+            ">Check IP</button>
+            </form>
+    
+            <form id="hashCheckForm">
+                {% csrf_token %}
+                <input type="text" name="hash" placeholder="Enter Hash">
+                <button type="submit" style="
+    background-color: #1d4ed8; 
+    color: white; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+">
+    Check Hash
+</button>
+
+            </form>
+        </div>
+
+
+    <!-- Success Modal  -->
+    <div id="successModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); z-index: 1000;">
+    
+    <div style="position: relative; margin: 15% auto; background-color: #e8f5e9; padding: 25px; width: 350px; 
+        border-radius: 10px; text-align: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
+        border: 2px solid #388e3c; animation: fadeIn 0.4s ease-in-out;">
+        
+        <!-- Success Icon -->
+        <div style="width: 60px; height: 60px; background-color: #388e3c; color: white; 
+            font-size: 30px; font-weight: bold; line-height: 60px; text-align: center; 
+            border-radius: 50%; margin: -50px auto 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);">
+            ✓
+        </div>
+
+        <h3 style="color: #2e7d32; margin-bottom: 10px; font-family: Arial, sans-serif;">Success</h3>
+
+        <hr style="border: 2px solid #388e3c; width: 100%;">
+
+        <div id="successContent"  style="color: #333; font-size: 16px; font-family: Arial, sans-serif; 
+            border-radius: 5px; box-shadow: inset 0px 1px 4px rgba(0,0,0,0.1);">
+
+        </div>
+
+
+
+        <!-- Close Button -->
+        <button onclick="document.getElementById('successModal').style.display='none'" 
+            style="background-color: #388e3c; color: white; border: none; padding: 10px 20px; 
+            font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); transition: 0.3s;">
+            Close
+        </button>
+
+    </div>
+</div>
+    <!-- End of Success Modal  -->
+    <!-- End of Error Modal  -->
+    <div id="errorModal" style=" display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background-color: rgba(0, 0, 0, 0.6); z-index: 1000;">
+    
+    <div style="position: relative; margin: 15% auto; background-color: #ffebee; padding: 25px; width: 350px; 
+        border-radius: 10px; text-align: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
+        border: 2px solid #d32f2f; animation: fadeIn 0.4s ease-in-out;">
+        
+        <!-- Error Icon -->
+        <div style="width: 60px; height: 60px; background-color: #d32f2f; color: white; 
+            font-size: 30px; font-weight: bold; line-height: 60px; text-align: center; 
+            border-radius: 50%; margin: -50px auto 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);">
+            !
+        </div>
+
+        <h3 style="color: #b71c1c; margin-bottom: 10px; font-family: Arial, sans-serif;">Error</h3>
+
+        <hr style="border: 2px solid #d32f2f; width: 100%;">
+
+            <p id="errorMessage" style="color: #333; font-size: 16px; font-family: Arial, sans-serif; 
+                margin: 15px 0; padding: 10px; background: #ffcdd2; border-radius: 5px; box-shadow: inset 0px 1px 4px rgba(0,0,0,0.1);">
+            </p>
+
+
+        <!-- Close Button -->
+        <button onclick="document.getElementById('errorModal').style.display='none'" 
+            style="background-color: #d32f2f; color: white; border: none; padding: 10px 20px; 
+            font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); transition: 0.3s;">
+            Close
+        </button>
+
+    </div>
+</div>
+
+    <!-- End of Error Modal  -->
+        <script>
+            function showErrorModal() {
+    // Display the modal
+    document.getElementById("errorModal").style.display = "block";
+}
+            function showSuccessModal() {
+    // Display the modal
+    document.getElementById("successModal").style.display = "block";
+}
+function closeErrorModal() {
+    document.getElementById("errorMessage").textContent = "";
+    document.getElementById("errorModal").style.display = "none";
+}
+            function getCSRFToken() {
+                return document.querySelector('[name=csrfmiddlewaretoken]').value;
+            }
+        
+            function fetchThreatIntelligence(endpoint, formId, resultId) {
+                document.getElementById(formId).onsubmit = function(event) {
+                    event.preventDefault();
+        
+                    let formData = new FormData(event.target);
+                    let csrfToken = getCSRFToken();
+
+let ip = formData.get('ip'); // Get the IP value
+let hash = formData.get('hash'); // Get the hash value
+
+console.log("IP: ", ip);
+console.log("Hash: ", hash);
+
+if(endpoint === "/check-ip/"){
+// Check if the IP value is not set (null, undefined, or empty)
+if (!ip) {
+    document.getElementById("errorMessage").textContent = "IP address is required.";
+    showErrorModal();
+    return false;
+} else {
+    // Regex to check for a valid IPv4 address
+    const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    // Validate IP using the regex
+    if (!ipRegex.test(ip)) {
+        document.getElementById("errorMessage").textContent ="Invalid IP address format";
+        showErrorModal()
+        return false;
+    } 
+}
+}
+else{
+
+
+// Check if the hash value is not set (null, undefined, or empty)
+if (!hash) {
+    console.log("Enter value for hash");
+    document.getElementById("errorMessage").textContent = "Hash value is required. Please enter a valid hash.";
+    showErrorModal();
+    return false;
+} else {
+    // Regex for a typical 32-character MD5 hash (lowercase hexadecimal)
+    const hashPatterns = [
+        { type: 'MD5', regex: /^[a-f0-9]{32}$/ },   // MD5 (32 characters, lowercase hex)
+        { type: 'SHA-1', regex: /^[a-f0-9]{40}$/ },  // SHA-1 (40 characters, lowercase hex)
+        { type: 'SHA-256', regex: /^[a-f0-9]{64}$/ } // SHA-256 (64 characters, lowercase hex)
+    ];
+
+    let isValidHash = false;
+    
+    // Loop through each regex pattern and check if the hash matches any of them
+    for (let pattern of hashPatterns) {
+        if (pattern.regex.test(hash)) {
+            console.log("Valid " + pattern.type + " hash: " + hash);
+            isValidHash = true;
+            break; // Exit the loop once a valid hash format is found
+        }
+    }
+
+    if (!isValidHash) {
+        document.getElementById("errorMessage").textContent = "Invalid hash format.";
+    showErrorModal();
+        
+        return false;
+    }
+}
+
+}
+
+//Storing The result into json format 
+function saveDataToFile(data) {
+    const filePath = path.join(__dirname, 'data.json');
+
+    // Read the existing data from the file
+    fs.readFile(filePath, 'utf8', (err, fileData) => {
+        let jsonArray = [];
+
+        if (err) {
+            // If no file exists (error means file is not found), start with an empty array
+            console.log("No previous data found, creating a new file.");
+        } else {
+            // Parse the existing JSON data to an array
+            jsonArray = JSON.parse(fileData);
+        }
+
+        // Add new data to the array
+        jsonArray.push(data);
+
+        // Write the updated data back to the file
+        fs.writeFile(filePath, JSON.stringify(jsonArray, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.error("Error saving data to file:", err);
+            } else {
+                console.log("Data saved successfully!");
+            }
+        });
+    });
+}
+//End of Storign in json Format
+                    
+                    fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            document.getElementById("errorMessage").textContent = `HTTP Error! Status: ${response.status}`;
+                            showErrorModal();
+                            throw new Error();
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        let resultDiv = document.getElementById(resultId);
+                        
+                        if (!resultDiv) {
+                            document.getElementById("errorMessage").textContent = `Error: Element with ID '${resultId}' not found.`;
+                            showErrorModal();
+                            return;
+                        }
+        
+                        if (data.error) {
+                            document.getElementById("errorMessage").textContent = `Error:${data.error}`;
+                            showErrorModal();
+                            return;
+                        } else {
+                            console.log(data);
+                            
+                            successContent.innerHTML = `
+                                <h4 class="font-bold text-blue-600">Threat Intelligence Report:</h4>
+                                <p><strong>Reputation:</strong> ${data.reputation}</p>
+                                <p><strong>Malicious:</strong> ${data.malicious}</p>
+                                <p><strong>Suspicious:</strong> ${data.suspicious}</p>
+                                <p><strong>Harmless:</strong> ${data.harmless}</p>
+                                <p><strong>Country:</strong> ${data.country}</p>
+                                <p><strong>Network:</strong> ${data.network}</p>
+                            `;
+                            showSuccessModal() 
+                        }
+                        resultDiv.classList.remove("hidden");
+                    })
+                    .catch(error => {
+                        document.getElementById("errorMessage").textContent = `Failed to fetch threat intelligence data: ${error.message}`;
+                        showErrorModal();
+                       return;
+                    });
+                };
+            }
+        
+            fetchThreatIntelligence("/check-ip/", "ipCheckForm", "ipResult");
+            fetchThreatIntelligence("/check-hash/", "hashCheckForm", "hashResult");
+            fetchThreatIntelligence("/check-domain/", "domainCheckForm", "domainResult");
+        </script>
+        
+    
+    
+    
+
+</body>
+</html>
