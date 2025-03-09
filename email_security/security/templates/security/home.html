@@ -8,19 +8,7 @@
 <style>
 
 
-body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-    height: 100vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                      url(https://img.freepik.com/free-vector/phishing-account_23-2148539268.jpg?t=st=1732796461~exp=1732800061~hmac=7147dec72953162c57e6c5e78aa19419861d348039c659a21d443be71129ecbc&w=1060);
-    background-size: cover;
-    background-position: center;
-        }
+
 
         /* Container for the form and results */
         .container {
@@ -62,10 +50,41 @@ body {
         .hidden {
             display: none;
         }
+        .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px; /* Adjust based on your header size */
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #f4f7f9, #003c5f); /* Gradient colors */
+    padding: 10px 10px;
+    border-radius: 8px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin: 0 15px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+}
 </style>
+
 <body class="text-gray-900">
 
-  
+    <div class="header">
+        <nav class="nav">
+            <a class="nav-link" href="http://127.0.0.1:5000/">Home</a>
+            <a class="nav-link" href="http://127.0.0.1:8000/">IP Authenticator</a>
+        </nav>
+    </div>
 
     <div class="mt-8 p-6 bg text-white rounded-lg shadow-md">
         <div class=" ml-20">
